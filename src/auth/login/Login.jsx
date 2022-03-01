@@ -6,10 +6,11 @@ import $ from 'jquery';
 import axios from 'axios'
 import { LOGIN } from "../../Url"
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Login() {
-    const [user, setUser] = useState("")
+
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,9 +30,14 @@ function Login() {
         $("#emailcheck").hide();
     })
 
+    // var url_string = window.location.href;
+    // const splitUrl = url_string.split('/')
+
+    // var role = splitUrl[4]
     var url_string = window.location.href;
-    const splitUrl = url_string.split('/')
-    var role = splitUrl[4]
+    const splitUrl = url_string.substr(url_string.lastIndexOf('/') + 1);
+    var role = splitUrl
+
 
     const submitHander = async () => {
 
@@ -53,12 +59,11 @@ function Login() {
             const { data } = await axios.post(LOGIN + role, { email, password }, config);
 
 
-            // store the user in localStorage
-            sessionStorage.setItem('user', JSON.stringify(data))
-            console.log("sessionStorage data", data)
-
-
             // insession store login user data in userInfo key 
+            sessionStorage.setItem("userInfo", JSON.stringify(data));
+
+
+
 
             if (data.statusCode === 401) {
                 $("#emailcheck").show();
@@ -69,13 +74,26 @@ function Login() {
             }
             if (data.statusCode === 403) {
 
-                toast('Incorrect role' );
-
+                toast.error('Incorrect role !', {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme:"colored"
+                });
+                setTimeout(()=>{
+                    History('/');
+                },3000)
+               
 
             }
 
             if (data.statusCode === 200) {
-                sessionStorage.setItem("userInfo", JSON.stringify(data))
+                // sessionStorage.setItem("userInfo", JSON.stringify(data));
+
                 History('/chat');
             }
         } catch (error) {
@@ -84,14 +102,13 @@ function Login() {
 
 
     }
- useEffect(() => {
-    const loggedInUser = sessionStorage.getItem("user");
-    if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
-      History('/chat');
-    }
-  }, [History]);
+    useEffect(() => {
+        const user = JSON.parse(sessionStorage.getItem("userInfo"))
+        console.log("user info", user)
+        if (user) {
+            History("/chat")
+        }
+    }, []);
 
     return (
         <>
@@ -124,24 +141,24 @@ function Login() {
                                     </Button>
                                 </div>
 
-                                <ToastContainer
-                                    position="top-center"
-                                    autoClose={5000}
-                                    // hideProgressBar={false}
-                                    newestOnTop={false}
-                                    closeOnClick
-                                    rtl={false}
-                                    pauseOnFocusLoss
-                                    draggable
-                                    pauseOnHover
-                                />
+
                                 <Link to="/sign_up"><p className='signup_account'>Don't have an account? <span>Sign Up</span></p></Link>
                             </div>
                         </div>
                     </Col>
                 </Row>
             </Container>
-
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     )
 }

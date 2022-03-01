@@ -7,9 +7,12 @@ const ChatProvider = ({ children })=> {
     const [users, setUsers] = useState("")
     const [selectedUserChat, setSelectedUserChat] = useState("");
     const [chats,setChats]=useState([]);
+    const [userChat,setUserChat]=useState([]);
+    const [chatUserName, setChatUserName] = useState("Username")
     // console.log("chat provider users",users)
     useEffect(() => {
-        const loggedInUser =  JSON.parse(sessionStorage.getItem("user"));
+        const loggedInUser =  JSON.parse(sessionStorage.getItem("userInfo"));
+      
         setUsers(loggedInUser);
         
         // if (loggedInUser === "" || loggedInUser === null || loggedInUser === undefined) {
@@ -17,7 +20,7 @@ const ChatProvider = ({ children })=> {
         // }
     }, []);
     return (
-        <chatContext.Provider value={{users,setUsers,selectedUserChat, setSelectedUserChat,chats,setChats}}>
+        <chatContext.Provider value={{users,setUsers,selectedUserChat, chatUserName, setChatUserName, setSelectedUserChat,chats,setChats,userChat,setUserChat}}>
             {children}
         </chatContext.Provider>
     )
