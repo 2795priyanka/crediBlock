@@ -20,7 +20,7 @@ function App() {
     <div className="App">
 
       {/* <Page/> */}
-      <BrowserRouter >
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />

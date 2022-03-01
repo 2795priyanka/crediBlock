@@ -78,7 +78,7 @@ function UserList() {
       await axios.post("http://3.138.38.80:3113/chat/createChat", { userId }, config).then(res => {
         console.log("res", res.data.Chat)
 
-        setSelectedUserChat(res.data.Chat);
+        // setSelectedUserChat(res.data.Chat);
         console.log("usersetSelectedUserChatidddddd", res.data.Chat)
 
       }).catch(err => {
@@ -125,14 +125,14 @@ function UserList() {
       console.log("fecth api", error)
     }
 
-  }, [])
+  }, [show])
 
   // console.log("fetch users for chat", chats)
 
   //=============function for fetch  all users chat============
   const selectedUser = async (userId, username) => {
     console.log("Chat Id selected user ----", userId, username)
-
+    setSelectedUserChat(userId);
     username.map((e, i) => {
 
       if (loggedUser.data._id !== e._id) {
@@ -174,7 +174,7 @@ function UserList() {
 
   return (
     <>
-
+      {/* <p className='text-center'>Search New Users</p> */}
       <div className="search">
         <InputGroup className="p-3 searchDiv">
           <Form.Control type="text" placeholder="Search..." className='search_bar validate' onClick={handleShow} />
@@ -183,6 +183,7 @@ function UserList() {
           </Button>
 
         </InputGroup>
+
         <Offcanvas show={show} onHide={handleClose}>
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>Search users for create chat</Offcanvas.Title>
