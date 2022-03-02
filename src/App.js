@@ -27,9 +27,9 @@ function App() {
           <Route path="/sign_up" element={<SignUp />} />
           <Route path="/forgot_pwd" element={<ForgotPwd />} />
           <Route path="/reset_pwd" element={<ResetPwd />} />
-          <Route path="/login/role=1" element={<Login />} />
-          <Route path="/login/role=2" element={<Login />} />
-          <Route path="/login/role=3" element={<Login />} />
+          <Route path="/login?role=1" element={<Login />} />
+          <Route path="/login?role=2" element={<Login />} />
+          <Route path="/login?role=3" element={<Login />} />
           <Route path="/chat" element={<Chat />} />
 
         </Routes>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Form, Button, InputGroup, ListGroup, Offcanvas } from 'react-bootstrap'
+import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import { ChatState } from '../context/ChatProvider';
 import $ from 'jquery';
@@ -7,19 +8,21 @@ import axios from 'axios';
 // import Avatar from 'react-avatar';
 
 function UserList() {
-  const { users, chats, setChats, setSelectedUserChat, setUserChat, setChatUserName } = ChatState();
+  const { chats, setChats, setSelectedUserChat,userChat, setUserChat, setChatUserName } = ChatState();
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState("")
   const [searchData, setSearchData] = useState([])
-
-  const [loggedUser, setLoggedUser] = useState();
-  // const [arr, setArr] = useState([])
+  const [loggedUser, setLoggedUser] = useState(null);
   const [show, setShow] = useState(false);
+
+  const loggedInUser =  JSON.parse(sessionStorage.getItem("userInfo"));
+  console.log("user token", loggedInUser)
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  // console.log("users", users.accessToken);
+  let History = useNavigate()
+  console.log("users", loggedInUser);
+ 
   useEffect(() => {
 
     // $("#userError").hide()
@@ -37,7 +40,7 @@ function UserList() {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${users.accessToken}`,
+          Authorization: `Bearer ${loggedInUser.accessToken}`,
         },
       };
 
@@ -71,7 +74,7 @@ function UserList() {
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${users.accessToken}`,
+          Authorization: `Bearer ${loggedInUser.accessToken}`,
         },
       };
 
@@ -93,17 +96,17 @@ function UserList() {
   }
 
   // ==========function for fetch all user=======
-
+  
   useEffect(() => {
-   
-    let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+    // let userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
     // console.log("user info ", userInfo)
-    setLoggedUser(userInfo);
+    // setLoggedUser(userInfo);
     // console.log("logged user ", loggedUser)
+    
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${userInfo.accessToken}`,
+          Authorization: `Bearer ${loggedInUser.accessToken}`,
         },
       };
 
@@ -114,7 +117,14 @@ function UserList() {
           console.log("res", res.data)
           console.log("fetch users for chat:", res.data.statusMsg)
           setLoading(false)
-          setChats(res.data.statusMsg);
+          if(res.data.statusCode === 400){
+            History('/chat');
+          }else{
+            
+            setChats(res.data.statusMsg);
+            
+          }
+        
         })
         .catch(error => {
           console.log("error", error)
@@ -129,13 +139,13 @@ function UserList() {
 
   // console.log("fetch users for chat", chats)
 
-  //=============function for fetch  all users chat============
+  //=============function for fetch  all users chat messages============
   const selectedUser = async (userId, username) => {
     console.log("Chat Id selected user ----", userId, username)
     setSelectedUserChat(userId);
     username.map((e, i) => {
 
-      if (loggedUser.data._id !== e._id) {
+      if (loggedInUser.data._id !== e._id) {
         setChatUserName(e.first_name + ' ' + e.last_name)
       }
 
@@ -143,7 +153,7 @@ function UserList() {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${users.accessToken}`,
+          Authorization: `Bearer ${loggedInUser.accessToken}`,
         },
       };
 
@@ -170,7 +180,6 @@ function UserList() {
   useEffect(() => {
     selectedUser();
   }, [])
-
 
   return (
     <>
@@ -250,7 +259,7 @@ function UserList() {
                 <ListGroup variant="" onClick={() => selectedUser(chatData._id, chatData.users)} key={index}>
                   <ListGroup.Item key={index}>
                     <div>{chatData.users.map((e, i) => {
-                      if (loggedUser.data._id !== e._id) {
+                      if (loggedInUser.data._id !== e._id) {
                         return (
                           <div className="users" key={i}>
                             <div className="user_img">

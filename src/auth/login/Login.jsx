@@ -35,7 +35,7 @@ function Login() {
 
     // var role = splitUrl[4]
     var url_string = window.location.href;
-    const splitUrl = url_string.substr(url_string.lastIndexOf('/') + 1);
+    const splitUrl = url_string.substr(url_string.lastIndexOf('?') + 1);
     var role = splitUrl
 
 
@@ -56,13 +56,16 @@ function Login() {
             };
 
             //login api calling
+            console.log("role", role)
             const { data } = await axios.post(LOGIN + role, { email, password }, config);
 
-
+            console.log("data", data)
             // insession store login user data in userInfo key 
+           if(data){
             sessionStorage.setItem("userInfo", JSON.stringify(data));
+           }
 
-
+         
 
 
             if (data.statusCode === 401) {
@@ -90,8 +93,11 @@ function Login() {
                
 
             }
-
+            if (data.statusCode === 400) {
+                 History('/');
+            }
             if (data.statusCode === 200) {
+                console.log("lkdfjsd")
                 // sessionStorage.setItem("userInfo", JSON.stringify(data));
 
                 History('/chat');
@@ -102,12 +108,14 @@ function Login() {
 
 
     }
+    
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem("userInfo"))
         console.log("user info", user)
-        if (user) {
-            History("/chat")
-        }
+        // if (user) {
+        //     console.log("kdfhkdsfh")
+        //     History("/chat")
+        // }
     }, []);
 
     return (

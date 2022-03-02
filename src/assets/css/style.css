@@ -285,6 +285,10 @@
 ::-webkit-scrollbar {
     display: none;
 }
+/* .chatMsg{
+    display: grid;
+    height: 100%;
+} */
 .search_box{
     box-shadow: 1px 2px 3px 4px #f3f6f7;
     background-color: rgb(255 255 255);

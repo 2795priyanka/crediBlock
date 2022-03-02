@@ -20,9 +20,9 @@ function LandingPage() {
                                
                                     <div className="d-grid gap-2">
                                        
-                                    <Link to="/login/role=1"  ><Button className="client_loginBtn" variant="primary" size="lg"><span>CrediBlock</span> <span className="uppercase role" style={{fontWeight: "500"}}>Client</span> </Button></Link>                                   
-                                    <Link to="/login/role=2" ><Button className="broker_loginBtn" variant="info" size="lg"><span>CrediBlock</span> <span className="uppercase role" style={{fontWeight: "500"}}>Broker</span></Button></Link>
-                                    <Link to="/login/role=3" ><Button className="supervisor_loginBtn" variant="secondary" size="lg"><span>CrediBlock</span> <span className="uppercase role" style={{fontWeight: "500"}}>Supervisor</span></Button></Link>
+                                    <Link to="/login?role=1"  ><Button className="client_loginBtn" variant="primary" size="lg"><span>CrediBlock</span> <span className="uppercase role" style={{fontWeight: "500"}}>Client</span> </Button></Link>                                   
+                                    <Link to="/login?role=2" ><Button className="broker_loginBtn" variant="info" size="lg"><span>CrediBlock</span> <span className="uppercase role" style={{fontWeight: "500"}}>Broker</span></Button></Link>
+                                    <Link to="/login?role=3" ><Button className="supervisor_loginBtn" variant="secondary" size="lg"><span>CrediBlock</span> <span className="uppercase role" style={{fontWeight: "500"}}>Supervisor</span></Button></Link>
                                        
                                     </div>
                                    

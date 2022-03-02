@@ -5,11 +5,13 @@ import { FaPaperPlane } from 'react-icons/fa';
 import { FaGrin } from 'react-icons/fa';
 import { ChatState } from '../context/ChatProvider';
 import axios from 'axios';
+
 function UserChat() {
-    const { users, selectedUserChat, setSelectedUserChat, userChat, setUserChat, chatUserName } = ChatState();
+    const { selectedUserChat, setSelectedUserChat, userChat, setUserChat, chatUserName } = ChatState();
     const [newMessage, setNewMessage] = useState("")
     const [message, setMessage] = useState([])
-
+    const loggedInUser =  JSON.parse(sessionStorage.getItem("userInfo"));
+  console.log("user token", loggedInUser)
 
     console.log("userChat of selected user", userChat)
     console.log("selectedUserChat._id", selectedUserChat)
@@ -18,7 +20,7 @@ function UserChat() {
         try {
             const config = {
                 headers: {
-                    Authorization: `Bearer ${users.accessToken}`,
+                    Authorization: `Bearer ${loggedInUser.accessToken}`,
                 },
             };
 
@@ -63,6 +65,7 @@ function UserChat() {
             </div>
 
             <div className="chat_room">
+               
                 <div className="chatMsg">
                     {
                         (() => {
@@ -74,13 +77,13 @@ function UserChat() {
                                 return (
                                     userChat.map(e => {
                                         console.log("content all", e)
-                                        if (users.data._id === e.sender_id) {
+                                        if (loggedInUser.data._id === e.sender_id) {
 
                                             return (
                                                 <div className="message">
                                                     <div className="odd-blurb">
                                                         <p>{e.content}</p>
-
+                                                        
                                                     </div>
                                                 </div>
                                             )
@@ -107,7 +110,7 @@ function UserChat() {
                     {message && message.map((e, i) => {
                         if (e === undefined || e === null || e === '') {
                             return (
-                               <div className='message'>
+                               <div className='message' key={i}>
                                    <div className='odd-blurb' style={{display:"none"}}></div>
                                </div>
                             )
@@ -124,9 +127,10 @@ function UserChat() {
                     })}
 
                 </div>
+                
             </div>
 
-
+          
             <div className="chat-bar">
                 <Row>
                     <Col lg={12} md={12} sm={12} xs={12} >
