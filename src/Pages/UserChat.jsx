@@ -9,13 +9,17 @@ import axios from 'axios';
 function UserChat() {
     const { selectedUserChat, setSelectedUserChat, userChat, setUserChat, chatUserName } = ChatState();
     const [newMessage, setNewMessage] = useState("")
-    const [message, setMessage] = useState([])
+    // const [message, setMessage] = useState([])
+
     const loggedInUser =  JSON.parse(sessionStorage.getItem("userInfo"));
   console.log("user token", loggedInUser)
 
     console.log("userChat of selected user", userChat)
     console.log("selectedUserChat._id", selectedUserChat)
-    const handleSubmit = async () => {
+
+
+
+    const sendMessage = async () => {
 
         try {
             const config = {
@@ -28,8 +32,17 @@ function UserChat() {
                 content: newMessage,
                 chatId: selectedUserChat
             }, config)
-            console.log("sendMessage data:", data.data.content)
-            message.push(data.data.content)
+            console.log("send Message data:", data.data.content)
+            // message.push(data.data.content)
+              await axios.get(`http://3.138.38.80:3113/message/allMessages/${selectedUserChat}`, config).then(xyz => {
+        console.log("resssssssss", xyz)
+        if (xyz.data.message === 400) {
+          alert('message not found')
+        }
+        setUserChat(xyz.data.message)
+      }).catch(err => {
+        console.log("err", err)
+      })
         }
         catch (error) {
             console.log("errror", error)
@@ -39,17 +52,17 @@ function UserChat() {
 
     const enterText = (event) => {
         if (event.key === 'Enter' || event.charCode === 13) {
-            handleSubmit()
+            sendMessage()
         }
     }
 
 
     useEffect(() => {
-        handleSubmit()
+        sendMessage()
 
-    }, [message])
+    }, [])
 
-    console.log("mesdasfd", message)
+    
     return (
         <div>
             <div className="frabic_btn">
@@ -76,7 +89,7 @@ function UserChat() {
                             } else {
                                 return (
                                     userChat.map(e => {
-                                        console.log("content all", e)
+                                       
                                         if (loggedInUser.data._id === e.sender_id) {
 
                                             return (
@@ -107,7 +120,7 @@ function UserChat() {
 
 
 
-                    {message && message.map((e, i) => {
+                    {/* {message && message.map((e, i) => {
                         if (e === undefined || e === null || e === '') {
                             return (
                                <div className='message' key={i}>
@@ -124,7 +137,7 @@ function UserChat() {
                             ) 
                         }
 
-                    })}
+                    })} */}
 
                 </div>
                 
@@ -140,7 +153,7 @@ function UserChat() {
                                 <span className='grin-icon'>
                                     <FaGrin />
                                 </span>
-                                <Button onClick={handleSubmit}><span><FaPaperPlane /></span></Button>
+                                <Button onClick={sendMessage}><span><FaPaperPlane /></span></Button>
                             </div>
                         </div>
                     </Col>

@@ -12,7 +12,7 @@ function UserList() {
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState("")
   const [searchData, setSearchData] = useState([])
-  const [loggedUser, setLoggedUser] = useState(null);
+  // const [loggedUser, setLoggedUser] = useState(null);
   const [show, setShow] = useState(false);
 
   const loggedInUser =  JSON.parse(sessionStorage.getItem("userInfo"));
@@ -21,7 +21,7 @@ function UserList() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   let History = useNavigate()
-  console.log("users", loggedInUser);
+  
  
   useEffect(() => {
 
@@ -140,9 +140,9 @@ function UserList() {
   // console.log("fetch users for chat", chats)
 
   //=============function for fetch  all users chat messages============
-  const selectedUser = async (userId, username) => {
-    console.log("Chat Id selected user ----", userId, username)
-    setSelectedUserChat(userId);
+  const fetchMessage = async (chatId, username) => {
+    console.log("Chat Id selected user ----", chatId, username)
+    setSelectedUserChat(chatId);
     username.map((e, i) => {
 
       if (loggedInUser.data._id !== e._id) {
@@ -159,7 +159,7 @@ function UserList() {
 
       console.log("config for fetching user chat", config)
 
-    await  axios.get(`http://3.138.38.80:3113/message/allMessages/${userId}`, config).then(xyz => {
+    await  axios.get(`http://3.138.38.80:3113/message/allMessages/${chatId}`, config).then(xyz => {
         console.log("resssssssss", xyz)
         if (xyz.data.message === 400) {
           alert('message not found')
@@ -178,8 +178,10 @@ function UserList() {
   }
 
   useEffect(() => {
-    selectedUser();
+    fetchMessage();
   }, [])
+
+  console.log("user list>>>")
 
   return (
     <>
@@ -256,7 +258,7 @@ function UserList() {
           <div className="user_list px-2">
             {chats && chats.map((chatData, index) => {
               return (
-                <ListGroup variant="" onClick={() => selectedUser(chatData._id, chatData.users)} key={index}>
+                <ListGroup variant="" onClick={() => fetchMessage(chatData._id, chatData.users)} key={index}>
                   <ListGroup.Item key={index}>
                     <div>{chatData.users.map((e, i) => {
                       if (loggedInUser.data._id !== e._id) {
