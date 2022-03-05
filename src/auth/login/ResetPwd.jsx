@@ -6,7 +6,8 @@ import { Link,useNavigate } from 'react-router-dom'
 import $ from 'jquery';
 import axios from 'axios';
 import { VERIFY_OTP, RESET_PWD } from '../../Url';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function ResetPwd() {
     const [otp, setOtp] = useState("");
     const [newpassword, setNewpassword] = useState("");
@@ -68,7 +69,19 @@ function ResetPwd() {
                     $("#passwordmismatch").show();
                 }
                 if(result.data.statusCode === 200){
-                    History('/')
+                    toast.success('Password Reset Successfully ', {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme:"colored"
+                    });
+                    setTimeout(()=>{
+                        History('/');
+                    },3000)
                 }
             }
         } catch (error) {
@@ -93,14 +106,14 @@ function ResetPwd() {
                                     <Form.Group className="mb-3" >
                                         <Form.Label>OTP </Form.Label>
                                         <Form.Control
-                                            placeholder="Enter OTP "
+                                            placeholder="Enter Your OTP "
                                             className='validate'
-                                            placeholder="Enter your OTP "
+                                          
                                             onChange={(e) => setOtp(e.target.value)}
                                             value={otp}
                                         />
-                                        <p className='error' id="otp1">*Enter OTP</p>
-                                        <p className='error' id="otpcheck">*Incorrect OTP!</p>
+                                        <p className='error' id="otp1">Enter valid OTP</p>
+                                        <p className='error' id="otpcheck">Incorrect OTP</p>
                                     </Form.Group>
 
                                     <Form.Group className="mb-3" >
@@ -113,7 +126,7 @@ function ResetPwd() {
                                             value={newpassword}
                                         />
                                     </Form.Group>
-                                    <p className='error' id="newpassword">*Enter new password</p>
+                                    <p className='error' id="newpassword">Enter new password</p>
 
                                     <Form.Group className="mb-3" >
                                         <Form.Label>Confirm Password</Form.Label>
@@ -124,8 +137,8 @@ function ResetPwd() {
                                             onChange={(e) => setConfirmpassword(e.target.value)}
                                             value={confirmpassword}
                                         />
-                                        <p className='error' id="confirmpassword">*Enter confirm password</p>
-                                        <p className='error' id="passwordmismatch">*password mismatch</p>
+                                        <p className='error' id="confirmpassword">Enter confirm password</p>
+                                        <p className='error' id="passwordmismatch">password mismatch</p>
                                     </Form.Group>
 
 
@@ -142,6 +155,17 @@ function ResetPwd() {
                     </Col>
                 </Row>
             </Container>
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     )
 }

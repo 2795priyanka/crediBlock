@@ -55,8 +55,6 @@ function Login() {
                 },
             };
 
-            //login api calling
-            console.log("role", role)
             const { data } = await axios.post(LOGIN + role, { email, password }, config);
 
             console.log("data", data)
@@ -65,19 +63,21 @@ function Login() {
             sessionStorage.setItem("userInfo", JSON.stringify(data));
            }
 
-         
-
-
             if (data.statusCode === 401) {
+                
                 $("#emailcheck").show();
                 $("#email1").hide();
+               
+              
             }
             if (data.statusCode === 402) {
                 $("#password2").show();
+             
+               
             }
             if (data.statusCode === 403) {
 
-                toast.error('Incorrect role !', {
+                toast.error('Incorrect role ', {
                     position: "top-center",
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -92,9 +92,6 @@ function Login() {
                 },3000)
                
 
-            }
-            if (data.statusCode === 400) {
-                 History('/');
             }
             if (data.statusCode === 200) {
                 console.log("lkdfjsd")
@@ -132,14 +129,14 @@ function Login() {
                                 <Form.Group className="mb-3">
                                     <Form.Label>Email </Form.Label>
                                     <Form.Control className='validate' type="email" placeholder="Enter your email " onChange={(e) => setEmail(e.target.value)} value={email} />
-                                    <p className='error' id="email1">*Enter Valid Email</p>
-                                    <p className='error' id="emailcheck">*Email does not exist!</p>
+                                    <p className='error' id="email1">Enter Valid Email</p>
+                                    <p className='error' id="emailcheck">Email does not exist </p>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control className='validate' type="password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} value={password} />
-                                    <p className='error' id="password1"> *Enter Password</p>
-                                    <p className='error' id="password2">*Password is not correct!</p>
+                                    <p className='error' id="password1">Enter Password</p>
+                                    <p className='error' id="password2">Password is not correct </p>
 
                                 </Form.Group>
                                 <Link to="/forgot_pwd"><p className='float-right'>Forgot Your Password?</p></Link>

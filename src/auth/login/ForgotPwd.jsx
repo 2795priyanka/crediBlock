@@ -6,6 +6,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FORGOT_PASSWORD } from '../../Url';
 import $ from 'jquery';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ForgotPwd() {
     const [email, setEmail] = useState("");
@@ -42,14 +44,27 @@ function ForgotPwd() {
             var UserId = data.UserId
             console.log("data",UserId)
 
-            if (data.statusCode == 401) {
+            if (data.statusCode === 401) {
                 $("#email1").show();
             }
-            if (data.statusCode == 400) {
+            if (data.statusCode === 400) {
                 $("#emailcheck").show();
             }
-            if (data.statusCode == 200) {
-                History('/reset_pwd?userId='+ UserId )
+            if (data.statusCode === 200) {
+                toast.success('Your OTP Send Successfully  ', {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme:"colored"
+                });
+                setTimeout(()=>{
+                    History('/reset_pwd?userId='+ UserId )
+                },3000)
+                
             }
 
         } catch (error) {
@@ -60,7 +75,7 @@ function ForgotPwd() {
 
 
     return (
-        <div>
+        <>
             <Header />
             <Container>
                 <Row>
@@ -80,8 +95,8 @@ function ForgotPwd() {
                                             onChange={(e) => setEmail(e.target.value)}
                                             value={email}
                                         />
-                                        <p className='error' id="email1">*Enter Valid Email</p>
-                                        <p className='error' id="emailcheck">*Email does not exist!</p>
+                                        <p className='error' id="email1">Enter Valid Email</p>
+                                        <p className='error' id="emailcheck">Email does not exist</p>
                                     </Form.Group>
 
                                     <div className="d-grid gap-2">
@@ -96,7 +111,18 @@ function ForgotPwd() {
                     </Col>
                 </Row>
             </Container>
-        </div>
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+        </>
     )
 }
 

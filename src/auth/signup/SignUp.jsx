@@ -5,7 +5,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import $ from 'jquery';
 import { SIGN_UP } from "../../Url";
 import axios from 'axios';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SignUp() {
     const [role, setrole] = useState("");
@@ -36,7 +37,7 @@ function SignUp() {
         $("#password2").hide();
         $("#rolecheck").hide();
         $("#emailcheck").hide();
-    })
+    }) 
 
     const submitHandler = async () => {
         const article = { role: role, first_name: name, last_name: lastname, email: email, password: password, confirmpassword: confirmpassword };
@@ -69,11 +70,23 @@ function SignUp() {
                     $("#rolecheck").show()
                 }
                 if (response.data.statusCode === 200) {
-                    History("/");
+                    toast.success('Your Registration Successfully Done ', {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme:"colored"
+                    });
+                    setTimeout(()=>{
+                        History('/login?role='+role);
+                    },3000)
                 }
             })
     }
-
+console.log("1233455",'/login?role='+role)
     return (
         <>
             <Header />
@@ -87,7 +100,7 @@ function SignUp() {
                             <div className="login_inputs mt-3">
 
                                 <Form.Group className="mb-3" >
-                                    <Form.Label>Roll Select </Form.Label>
+                                    <Form.Label>Role Select </Form.Label>
                                     <Form.Select
                                         className='validate'
                                         aria-label="Default select example"
@@ -100,7 +113,7 @@ function SignUp() {
                                         <option value="2">Broker</option>
                                         <option value="3">Supervisor</option>
                                     </Form.Select>
-                                    <p className="error" id="rolecheck">*Please select role</p>
+                                    <p className="error" id="rolecheck">Please select role</p>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
@@ -109,12 +122,13 @@ function SignUp() {
                                         type="text"
                                         placeholder="Enter your first name "
                                         name="first_name"
-                                       
-                                        onChange={(e) => setName(e.target.value)}
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value.replace(/[^a-zA-Z]/ig,''))}
                                         required
                                         className='validate'
+                                        
                                     />
-                                    <p className='error' id="firstName"> *Enter Your FirstName</p>
+                                    <p className='error' id="firstName">Enter Your FirstName</p>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" >
@@ -124,11 +138,11 @@ function SignUp() {
                                         type="text"
                                         placeholder="Enter your last name "
                                         name="last_name"
-                                       
-                                        onChange={(e) => setLastName(e.target.value)}
+                                        value={lastname}
+                                        onChange={(e) => setLastName(e.target.value.replace(/[^a-zA-Z]/ig,''))}
                                         required
                                     />
-                                    <p className='error' id="lastName"> *Enter Your LastName</p>
+                                    <p className='error' id="lastName">Enter Your LastName</p>
                                 </Form.Group>
 
 
@@ -143,8 +157,8 @@ function SignUp() {
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
                                     />
-                                    <p className='error' id="email1">*Enter Valid Email</p>
-                                    <p className='error' id="emailcheck">*Email already exist</p>
+                                    <p className='error' id="email1">Enter Valid Email</p>
+                                    <p className='error' id="emailcheck">Email already exist</p>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" >
@@ -158,7 +172,7 @@ function SignUp() {
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
                                     />
-                                    <p className='error' id="password1"> *Enter Password</p>
+                                    <p className='error' id="password1">Enter Password</p>
                                 </Form.Group>
 
 
@@ -173,8 +187,8 @@ function SignUp() {
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         required
                                     />
-                                    <p className='error' id="passwordmismatch">*Password Mistmatch</p>
-                                    <p className='error' id="password2">*Confirm Password required</p>
+                                    <p className='error' id="passwordmismatch">Password Mistmatch</p>
+                                    <p className='error' id="password2">Confirm Password required</p>
                                 </Form.Group>
 
                                 <Form.Group className="mb-3">
@@ -198,13 +212,24 @@ function SignUp() {
                                     </Button>
                                 </div>
             
-                                <Link to="/"><p className='signup_account'>already have an account? <span>Login</span></p></Link>
+                                <Link to="/"><p className='signup_account'>Already have an account? <span>Login</span></p></Link>
 
                             </div>
                         </div>
                     </Col>
                 </Row>
             </Container>
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     )
 }

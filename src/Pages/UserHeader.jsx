@@ -4,22 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { FaBell } from 'react-icons/fa';
 
 function UserHeader() {
-   
     const navigate = useNavigate();
+    
 
-    // let userProfile = JSON.parse(sessionStorage.getItem("userInfo"));
-    // let userProfileName = userProfile.data.first_name;
+     let userToken = JSON.parse(sessionStorage.getItem("userInfo"));
+      userToken = userToken.data.first_name;
+     console.log("user token of header component",userToken)
    
-   
-// console.log("logged user profile ", userProfileName)
-
-
-
-const logout = ()=>{
-    let d=  sessionStorage.removeItem("userInfo");
-    console.log("d", d)
+    // ========user logout function========
+     const logout = ()=>{
+      let delete_token=  sessionStorage.removeItem("userInfo");
+      console.log("delete_token", delete_token)
       navigate("/");
-  }
+    }
+
+
     return (
         <div>
             <Container fluid>
@@ -43,7 +42,7 @@ const logout = ()=>{
                                             <div className="user_img">
                                                 <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="" />
                                             </div>
-                                            <NavDropdown title="user" id="basic-nav-dropdown">
+                                            <NavDropdown title={userToken} id="basic-nav-dropdown">
                                             <NavDropdown.Item href="#">Profile</NavDropdown.Item>
 
                                             <NavDropdown.Divider />

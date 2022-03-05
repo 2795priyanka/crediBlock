@@ -20,7 +20,7 @@ function App() {
     <div className="App">
 
       {/* <Page/> */}
-      <BrowserRouter >
+      <BrowserRouter basename='/credit_block/'>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
