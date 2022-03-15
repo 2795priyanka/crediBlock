@@ -86,7 +86,7 @@ function SignUp() {
                 }
             })
     }
-console.log("1233455",'/login?role='+role)
+
     return (
         <>
             <Header />
@@ -129,6 +129,7 @@ console.log("1233455",'/login?role='+role)
                                         
                                     />
                                     <p className='error' id="firstName">Enter Your FirstName</p>
+                                  
                                 </Form.Group>
 
                                 <Form.Group className="mb-3" >
